@@ -1,0 +1,86 @@
+#include<stdio.h>
+double abs(double x){
+    if(x<0){
+        return (double)(-1)*x;
+    }
+    return x;
+}
+main(){
+    int n,i,j,k,l,m,mi,mj;
+    double a[200][200],b[200][200],c[200][200],d;
+    while(scanf("%d",&n)==1){
+        for(i=0;i<n;i++){
+            for(j=0;j<n;j++){
+                scanf("%lf",&a[i][j]);
+                c[i][j]=a[i][j];
+                if(i==j){
+                    b[i][j]=1;
+                }
+                else{
+                    b[i][j]=0;
+                }
+            }
+        }
+        for(j=0,i=0;j<n,i<n;j++){
+            mi=i;
+            for(k=i+1;k<n;k++){
+                if(abs(a[k][j])>abs(a[mi][j])){
+                    mi=k;
+                }
+            }
+            if(a[mi][j]!=0){
+                for(l=0;l<n;l++){
+                    d=a[mi][l];
+                    a[mi][l]=a[i][l];
+                    a[i][l]=d;
+                    d=b[mi][l];
+                    b[mi][l]=b[i][l];
+                    b[i][l]=d;
+                }
+                d=a[i][j];
+                for(l=0;l<n;l++){
+                    a[i][l]=a[i][l]/d;
+                    b[i][l]=b[i][l]/d;
+                }
+                for(l=0;l<n;l++){
+                    if(l!=i){
+                        d=a[l][j];
+                        for(m=0;m<n;m++){
+                            a[l][m]=a[l][m]-d*a[i][m];
+                            b[l][m]=b[l][m]-d*b[i][m];
+                        }
+                    }
+                }
+                i++;
+            }
+        }
+        d=0;    
+        for(i=0;i<n;i++){
+            for(j=0;j<n;j++){
+                if(i==j){
+                    a[i][j]=-1;
+                }
+                else{
+                    a[i][j]=0;
+                }
+            }
+        }        
+        for(i=0;i<n;i++){
+            for(j=0;j<n;j++){
+                for(k=0;k<n;k++){
+                    a[i][j]=a[i][j]+c[i][k]*b[k][j];
+                }
+                if(abs(a[i][j])>d){
+                    d=abs(a[i][j]);
+                }
+            }
+        }
+        printf("%g\n",d);
+        for(i=0;i<n;i++){
+            for(j=0;j<n;j++){
+                printf("%g ",b[i][j]);
+            }
+            printf("\n");
+        }
+    }
+}
